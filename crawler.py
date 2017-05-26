@@ -56,7 +56,6 @@ class Crawle:
                 print len(hrefs)
                 hrefs.pop(0)
             except:
-                hrefs.pop(0)
                 print 'except 3'
                 pass
 
