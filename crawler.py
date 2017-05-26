@@ -95,7 +95,7 @@ class Crawle:
         #f.close()
         global f
 
-    #### Get after variable url vlaues
+    #### Get after variable [url] vlaues
     def genre(self, x):
         self.x = x
         for n in self.x.findAll("div", class_='bottomNav'):
