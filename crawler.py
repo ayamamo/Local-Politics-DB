@@ -82,7 +82,7 @@ class Crawle:
     def Output(self, x, y):
         self.x = x
         self.y = y
-        f = open('/Users/[]/Desktop/crawler/ITP/test.csv', 'a')# a 上書き, w 新規書き込み
+        f = open('test.csv', 'a')# a 上書き, w 新規書き込み
 
         writer = csv.writer(f, lineterminator='\n')
         csvlist = []
