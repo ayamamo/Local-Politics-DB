@@ -1,1 +1,1 @@
-# Autonatic program
+# Automatic program
