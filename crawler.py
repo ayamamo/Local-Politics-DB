@@ -90,7 +90,6 @@ class Crawle:
         #f.close()
         global f
 
-
     def genre(self, x):
         self.x = x
         for n in self.x.findAll("div", class_='bottomNav'):
