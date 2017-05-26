@@ -29,11 +29,13 @@ while len(IngUrls) > 0:
 class Crawle:
 
     def GetUrl(self):
+        #### First get
         ayamamo.genre(soup)
         #print hrefs
 
         dup = ''
         lhref = url + hrefs[-1]
+        #### != First get
         while url + hrefs[-1] != dup:
             try:
                 dup = url + hrefs[-1]
@@ -45,6 +47,7 @@ class Crawle:
                 print 'except 2'
                 pass
 
+        ### While exits url
         while len(hrefs) > 0:
             try:
                 htmtex = urllib2.urlopen(url + hrefs[0]).read()
@@ -53,10 +56,11 @@ class Crawle:
                 print len(hrefs)
                 hrefs.pop(0)
             except:
-                    hrefs.pop(0)
-                    print 'except 3'
-                    pass
+                hrefs.pop(0)
+                print 'except 3'
+                pass
 
+    #### Get mail and title
     def TitleMail(self, x):
         self.x = x
         for MailTag in self.x.findAll("a", class_='emailLink'):
@@ -75,6 +79,7 @@ class Crawle:
 
         f.close()
 
+    #### Output csv
     def Output(self, x, y):
         self.x = x
         self.y = y
@@ -90,6 +95,7 @@ class Crawle:
         #f.close()
         global f
 
+    #### Get after variable url vlaues
     def genre(self, x):
         self.x = x
         for n in self.x.findAll("div", class_='bottomNav'):
