@@ -1,1 +1,1 @@
-# web crawler, send mail script,
+# web crawler, send mail prgram,
