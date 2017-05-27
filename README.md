@@ -1,1 +1,2 @@
-# Automatic program
+# AutomaticProgram
+test
