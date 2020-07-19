@@ -1,0 +1,149 @@
+Public path As String
+
+Sub download()
+
+  '変更箇所は2箇所
+  '使い方: 開発タブ > Visual Basic > ツール > 参照設定(R) > から以下2つのライブラリ ファイルにチェックを入れ「OK」をクリック
+  '        Microsoft Internet Controls, Microsoft HTML Object Library
+  '        全文表示ができない自治体の議事録を開き、一番はじめの発言者をクリック後、そのURLをリスト化する
+  '        議事録を公開しているフォーマットは自治体によって異なるので、その都度Function eachDownloadを変更する必要がある
+  '        ' End of read objIE objectのデータ型が分からなかったので、べた書きしてます。
+  
+  
+  Dim tmp As String
+  Dim objIE As Object
+  Dim objFrame As FramesCollection
+  Dim button As HTMLInputButtonElement
+  Dim fileNum As Integer
+  Dim jisCode As String
+  Dim buf As String, r As Long
+  
+  path = "C:¥Users¥natorizemi¥Desktop¥新しいフォルダー¥" '*****要変更*****
+  
+  Open path & "url-settsu.txt" For Input As #1
+    Do Until EOF(1)
+      Line Input #1, tmp
+      eachDownload (tmp)
+    Loop
+  Close #1
+  
+  Set ts = Nothing
+  Set fso = Nothing
+  
+End Sub
+
+Function eachDownload(str As String) As String
+
+  fileNum = 2
+  initCnt = 0
+  gotosave = 0
+    
+  Open path & "out.txt" For Output As #fileNum
+    
+  Set objIE = CreateObject("Internetexplorer.Application")
+  objIE.Visible = True
+  objIE.navigate str
+  
+  ' End of read objIE object
+  Do While objIE.Busy = True Or objIE.readyState <> 4
+    DoEvents
+  Loop
+  
+  Set objFrame = objIE.document.frames
+     
+  ' Initial processing 1
+  
+  Do While objIE.Busy = True Or objIE.readyState <> 4
+    DoEvents
+  Loop
+  
+  Print #fileNum, objFrame("document")("gijiroku").document.body.innerText
+  objFrame("document")("hatugen").document.getElementsByTagName("form")(0).getElementsByTagName("a")(0).Click
+  
+  Dim objshell As Object
+  Dim htmlDoc2 As HTMLDocument
+  Set objshell = CreateObject("Shell.Application")
+  Set objIE2 = objshell.Windows(objshell.Windows.Count - 1)
+  objIE2.Visible = True
+  Set objFrame2 = objIE2.document.frames
+
+  Do While cnt < 1
+  
+  Application.Wait Now + TimeValue("00:00:01")
+  
+  On Error GoTo errorhndler
+
+    If InStr(objFrame2("document")("hatugen").document.getElementsByTagName("form")(0).getElementsByTagName("a")(0), "▲") > 0 Then
+      Print #fileNum, objFrame2("document")("gijiroku").document.body.innerText
+      GoTo CONTINUE
+    Else
+      Print #fileNum, objFrame2("document")("gijiroku").document.body.innerText
+    End If
+      
+    objFrame2("document")("hatugen").document.getElementsByTagName("form")(0).getElementsByTagName("a")(1).Click
+
+  Loop
+  
+    
+errorhndler:
+    Open path & "error.txt" For Append As #3
+      Print #3, str
+    Close #3
+  
+CONTINUE:
+  
+  
+  Close #fileNum
+  
+  ' Write exel from txt
+  'Open fpath For Input As #fileNum
+    'Do Until EOF(1)
+      'Line Input #fileNum, buf
+      'r = r + 1
+      'Cells(r, 1) = buf
+    'Loop
+  'Close #fileNum
+
+  objIE2.Quit
+  objIE.Quit
+  Set objIE2 = Nothing
+  Set objIE = Nothing
+  
+  If Not gotosave = 1 Then
+    Call saveAs
+  End If
+
+  
+End Function
+
+Function saveAs() As String
+  jisCode = "27224" '*****要変更*****
+  i = 1
+  Workbooks.Open path & "out.txt"
+  
+  Do While aD = ""
+    '会議名を取得
+    If cName2 = "" Then
+      On Error Resume Next
+        cName = StrConv(Trim(NBSP2SP(Cells(i, 1).Find("録", Cells(i, 1)))), vbNarrow)
+    End If
+  
+    '日付を取得および和暦を西暦へ変更
+    On Error Resume Next
+      jC = StrConv(Trim(Cells(i, 1).Find("平成", Cells(i, 1))), vbNarrow)
+      aD = Format(Left(jC, InStr(jC, "日") - 1) + "日", "yyyymmdd")
+    i = i + 1
+    Loop
+  fN = aD + jisCode + cName
+  ActiveWindow.Close
+  Name path & "out.txt" As path & fN & ".txt"
+End Function
+
+
+'remove nbsp
+Function NBSP2SP(str As String) As String
+  Dim nbsp(0 To 1) As Byte
+  nbsp(0) = 160
+  nbsp(1) = 0
+  NBSP2SP = Replace(str, nbsp, " ")
+End Function
