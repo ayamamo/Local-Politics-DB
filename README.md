@@ -1,5 +1,8 @@
 # 地方議会関連データの収集及び加工処理
-![Uploading スクリーンショット 2020-07-20 13.20.11.png…]()
+
+
+![er](https://user-images.githubusercontent.com/11134369/87899538-78d9e700-ca8c-11ea-8089-ba53acb0d64a.png)
+
 
 
 - scrape_go2senkyo.py
