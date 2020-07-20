@@ -1,9 +1,7 @@
 # 地方議会関連データの収集及び加工処理
 
-
+以下の各テーブルをデータベースへ格納するために行ったプログラムによる自動化処理を次から記載していく。
 ![er](https://user-images.githubusercontent.com/11134369/87899538-78d9e700-ca8c-11ea-8089-ba53acb0d64a.png)
-
-
 
 - scrape_go2senkyo.py
   - 議員情報を収集するファイル。
